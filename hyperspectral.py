@@ -1,3 +1,5 @@
+from typing import List, Tuple
+import matplotlib.pyplot as plt
 import numpy as np
 
 # return the index in a sorted that is nearest to a specified value;
@@ -42,3 +44,33 @@ def multispectral_raster_to_rgb( raster: np.ndarray, sorted_wavelengths: np.ndar
     if None in [r,g,b]: raise ValueError('Input wavelength array does not cover expected range of visible spectrum.')
 
     return raster[:,:,[r,g,b]]
+
+
+def get_spectrum( data_cube: np.ndarray, pixel: Tuple[int,int] ) -> np.ndarray:
+
+    if len(data_cube.shape) != 3:
+        raise ValueError('HSI data cube expected to have 3 dimensions.')
+    
+    return data_cube[pixel[0], pixel[1], :]
+
+
+# helper function for generating clean plots of spectra
+def spectra_plot( wavelengths: np.ndarray, spectra: np.ndarray, xlabel='Wavelength (nm)', ylabel = 'Radiance', legend_labels: List[str] = []):
+    
+    if len(wavelengths) != spectra.shape[1]:
+        raise ValueError('Cannot plot spectra; number of wavelengths (x-axis) and samples (y-axis) is not the same.')
+    
+    if len(legend_labels) > 0 and len(legend_labels) != spectra.shape[0]:
+        raise ValueError('Provided list of labels does not correspond to number of spectra to be plotted.')
+    
+    for i in range(spectra.shape[0]):
+        plt.plot(wavelengths, spectra[i,:])
+
+    plt.grid(True)
+    plt.xlim(wavelengths[0], wavelengths[-1])
+
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+
+    if len(legend_labels) > 0:
+        plt.legend(legend_labels)
