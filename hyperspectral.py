@@ -45,16 +45,12 @@ def multispectral_raster_to_rgb( raster: np.ndarray, sorted_wavelengths: np.ndar
 
     return raster[:,:,[r,g,b]]
 
-
 def get_spectrum( data_cube: np.ndarray, pixel: Tuple[int,int] ) -> np.ndarray:
-
     if len(data_cube.shape) != 3:
         raise ValueError('HSI data cube expected to have 3 dimensions.')
-    
     return data_cube[pixel[0], pixel[1], :]
 
 
-# helper function for generating clean plots of spectra
 def spectra_plot( wavelengths: np.ndarray, spectra: np.ndarray, xlabel='Wavelength (nm)', ylabel = 'Radiance', legend_labels: List[str] = []):
     
     if len(wavelengths) != spectra.shape[1]:
