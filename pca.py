@@ -1,3 +1,5 @@
+import numpy as np
+
 class principal_components:
 
     def __init__(self, data_matrix: np.ndarray):
