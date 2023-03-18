@@ -51,7 +51,7 @@ def get_spectrum( data_cube: np.ndarray, pixel: Tuple[int,int] ) -> np.ndarray:
     return data_cube[pixel[0], pixel[1], :]
 
 
-def spectra_plot( wavelengths: np.ndarray, spectra: np.ndarray, xlabel='Wavelength (nm)', ylabel = 'Radiance', legend_labels: List[str] = []):
+def spectra_plot( ax: plt.Axes, wavelengths: np.ndarray, spectra: np.ndarray, xlabel='Wavelength (nm)', ylabel = 'Radiance', legend_labels: List[str] = []):
     
     if len(wavelengths) != spectra.shape[1]:
         raise ValueError('Cannot plot spectra; number of wavelengths (x-axis) and samples (y-axis) is not the same.')
@@ -60,13 +60,14 @@ def spectra_plot( wavelengths: np.ndarray, spectra: np.ndarray, xlabel='Waveleng
         raise ValueError('Provided list of labels does not correspond to number of spectra to be plotted.')
     
     for i in range(spectra.shape[0]):
-        plt.plot(wavelengths, spectra[i,:])
+        ax.plot(wavelengths, spectra[i,:])
 
-    plt.grid(True)
-    plt.xlim(wavelengths[0], wavelengths[-1])
+    ax.grid(True)
+    ax.set_xlim(wavelengths[0], wavelengths[-1])
+    ax.set_ylim(0, 1.10 * np.max(spectra))
 
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
 
     if len(legend_labels) > 0:
-        plt.legend(legend_labels)
+        ax.legend(legend_labels)
